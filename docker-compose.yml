@@ -1,16 +1,25 @@
 version: '3.3'
 services:
+  postgres:
+    image: postgres:14
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - '5432:5432'
+    volumes: 
+      - /var/lib/postgresql/data
+
   mysql:
-    platform: linux/amd64 # use for mac M1
-    image: mysql:8.0
+    platform: linux/x86_64 # use for mac M1
+    image: mysql:8.0.26
     restart: always
     container_name: mysql
+    environment:
+     MYSQL_ALLOW_EMPTY_PASSWORD: 1
     volumes:
       - ./mysql:/var/lib/mysql
-    environment:
-      MYSQL_USER: root
-      MYSQL_PASSWORD: password
-      MYSQL_ROOT_PASSWORD: password
     ports:
       - '3306:3306'
     
@@ -22,6 +31,3 @@ services:
       - ./mongodb:/data/db
     ports:
       - '27017:27017'
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: password
